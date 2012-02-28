@@ -11,6 +11,7 @@ import au.com.anz.robot.model.Robot;
  * Time: 9:33 PM
  */
 public class MoveCommand extends AbstractCommand {
+    public static final String COMMAND = "MOVE";
 
     public MoveCommand(Robot robot) {
         super(robot);

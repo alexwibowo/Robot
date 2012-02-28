@@ -8,6 +8,7 @@ import au.com.anz.robot.model.Robot;
  * Time: 9:33 PM
  */
 public class LeftCommand extends AbstractCommand {
+    public static final String COMMAND = "LEFT";
 
     public LeftCommand(Robot robot) {
         super(robot);
