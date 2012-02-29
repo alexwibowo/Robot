@@ -44,4 +44,14 @@ public class BoardUnitTest {
     public void isValidPosition_should_return_true_when_given_valid_coordinate() {
         assertTrue(board.isValidPosition(0, 0));
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_not_allow_negative_value_for_board_width() {
+        new Board(-1, 5);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void should_not_allow_negative_value_for_board_height() {
+        new Board(1, -5);
+    }
 }
