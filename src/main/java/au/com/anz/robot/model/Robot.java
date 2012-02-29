@@ -22,12 +22,24 @@ public class Robot {
      */
     private Board board;
 
+    /**
+     * X coordinate of the robot
+     */
     private int x;
 
+    /**
+     * Y coordinate of the robot
+     */
     private int y;
 
+    /**
+     * Which way the robot is facing
+     */
     private Direction facingDirection;
 
+    /**
+     * The board itself.
+     */
     private boolean onBoard;
 
     public Robot(Board board) {
@@ -168,14 +180,14 @@ public class Robot {
         }
     }
 
+    /**
+     * @return robot location & facing direction, if on board,
+     * a message that the robot is not on board otherwise
+     */
     @Override
     public String toString() {
         if (isOnBoard()) {
-            return new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)
-                    .append("x", x)
-                    .append("y", y)
-                    .append("facing", facingDirection)
-                    .toString();
+            return String.format("%d,%d,%s", getX(), getY(), getFacingDirection());
         }else {
             return "Robot is not on board yet";
         }

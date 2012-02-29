@@ -15,8 +15,6 @@ import static org.apache.commons.lang.StringUtils.trim;
 public class CommandParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandParser.class.getName());
 
-    private CommandParser(){}
-
     /**
      * Parse a string as a {@link Command}
      * <p/>

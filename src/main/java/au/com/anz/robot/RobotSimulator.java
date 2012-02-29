@@ -4,6 +4,7 @@ import au.com.anz.robot.command.Command;
 import au.com.anz.robot.command.InvalidCommandException;
 import au.com.anz.robot.model.Board;
 import au.com.anz.robot.model.Robot;
+import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,9 +64,39 @@ public class RobotSimulator {
         return robot;
     }
 
-    public static void main(String... args) throws IOException {
-        Commander commandReader = new SystemInCommander();
-        RobotSimulator robotSimulator = new RobotSimulator(commandReader);
+    public static void main(String... args) throws IOException, ParseException {
+        Commander commander = getCommander(args);
+        RobotSimulator robotSimulator = new RobotSimulator(commander);
         robotSimulator.run();
+    }
+
+    private static Commander getCommander(String[] args) throws IOException {
+        Commander commandReader = null;
+        Options options = new Options();
+        Option fileOption = OptionBuilder.withArgName("file")
+                .hasArg()
+                .withDescription("When this option is specified, the program will use the given file as input, instead of reading from standard input")
+                .create("file");
+
+        options.addOption(fileOption);
+        CommandLineParser parser = new PosixParser();
+        try {
+            CommandLine cli = parser.parse(options, args);
+            if (cli.hasOption("file")) {
+                commandReader = new InputFileCommander(cli.getOptionValue("file"));
+            }else{
+                commandReader = new SystemInCommander();
+            }
+            return commandReader;
+        } catch (ParseException e) {
+            displayHelp(options);
+            System.exit(1);
+            return null;
+        }
+    }
+
+    private static void displayHelp(Options options) {
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp( "Robot Simulator", options );
     }
 }

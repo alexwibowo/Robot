@@ -43,6 +43,15 @@ public class CommandParserUnitTest {
         assertThat(CommandParser.fromString(" PLACE 0,1,NORTH\t"), instanceOf(PlaceCommand.class));
     }
 
+    @Test
+    public void should_recognize_REPORT_command() throws InvalidCommandException {
+        assertThat(CommandParser.fromString("REPORT"), instanceOf(ReportCommand.class));
+        assertThat(CommandParser.fromString(" REPORT "), instanceOf(ReportCommand.class));
+        assertThat(CommandParser.fromString(" REPORT\n"), instanceOf(ReportCommand.class));
+        assertThat(CommandParser.fromString(" REPORT\t"), instanceOf(ReportCommand.class));
+
+    }
+
     @Test(expected = MalformedCommandException.class)
     public void should_throw_exception_when_given_wrong_command() throws InvalidCommandException{
         CommandParser.fromString("VOODOO_CHICKEN");

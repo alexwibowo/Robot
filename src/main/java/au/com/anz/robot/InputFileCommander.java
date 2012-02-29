@@ -8,6 +8,9 @@ import java.util.Scanner;
 import static java.lang.String.format;
 
 /**
+ * Implementation of {@link Commander} which read content of a file to read all the
+ * commands to be given to the robot.
+ * <p/>
  * User: agwibowo
  * Date: 29/02/12
  * Time: 8:39 PM
@@ -16,8 +19,12 @@ public class InputFileCommander implements Commander{
 
     private Scanner scanner;
 
-    public InputFileCommander(String filename) throws IOException {
-        init(filename);
+    /**
+     * @param filepath path to the file
+     * @throws IOException if the file does not exist, or cannot be read
+     */
+    public InputFileCommander(String filepath) throws IOException {
+        init(filepath);
     }
 
     private void init(String filepath)
