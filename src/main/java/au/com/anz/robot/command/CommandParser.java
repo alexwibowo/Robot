@@ -1,6 +1,5 @@
 package au.com.anz.robot.command;
 
-import au.com.anz.robot.model.Robot;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,20 +14,21 @@ import static org.apache.commons.lang.StringUtils.trim;
 public class CommandParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandParser.class.getName());
 
-    public static Command parse(Robot robot, String commandString)
+    public static Command parse(String commandString)
             throws InvalidCommandException {
         String trimmedCommand = trim(commandString);
         if (StringUtils.equals(LeftCommand.COMMAND, trimmedCommand)) {
-            return new LeftCommand(robot);
+            return new LeftCommand();
         } else if (StringUtils.equals(RightCommand.COMMAND, trimmedCommand)) {
-            return new RightCommand(robot);
+            return new RightCommand();
         } else if (StringUtils.equals(MoveCommand.COMMAND, trimmedCommand)) {
-            return new MoveCommand(robot);
+            return new MoveCommand();
         } else if (StringUtils.equals(ReportCommand.COMMAND, trimmedCommand)) {
-            return new ReportCommand(robot);
+            return new ReportCommand();
         } else if (StringUtils.startsWith(trimmedCommand, PlaceCommand.COMMAND)) {
-            return PlaceCommand.parse(robot, commandString);
+            return PlaceCommand.parse(commandString);
         } else{
+            LOGGER.warn("Unknown command had been given [{}]", commandString);
             throw new UnsupportedOperationException(commandString);
         }
     }

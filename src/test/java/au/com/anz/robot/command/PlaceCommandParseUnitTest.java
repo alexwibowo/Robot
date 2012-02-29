@@ -1,9 +1,6 @@
 package au.com.anz.robot.command;
 
-import au.com.anz.robot.model.Board;
 import au.com.anz.robot.model.Direction;
-import au.com.anz.robot.model.Robot;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,16 +14,9 @@ import static org.junit.Assert.fail;
  */
 public class PlaceCommandParseUnitTest {
 
-    private Robot robot;
-
-    @Before
-    public void setup() {
-        robot = new Robot(new Board(5, 5));
-    }
-
     @Test
     public void should_be_able_to_parse_correctly_formatted_string() throws InvalidCommandException {
-        PlaceCommand command = PlaceCommand.parse(robot, "PLACE 1,2,NORTH");
+        PlaceCommand command = PlaceCommand.parse("PLACE 1,2,NORTH");
         assertThat(command.getX(), equalTo(1));
         assertThat(command.getY(), equalTo(2));
         assertThat(command.getFacingDirection(), equalTo(Direction.NORTH));
@@ -36,7 +26,7 @@ public class PlaceCommandParseUnitTest {
 
     @Test
     public void should_be_able_to_handle_whitespaces() throws InvalidCommandException {
-        PlaceCommand command = PlaceCommand.parse(robot, "  PLACE         1,\t 2,  NORTH   ");
+        PlaceCommand command = PlaceCommand.parse("  PLACE         1,\t 2,  NORTH   ");
         assertThat(command.getX(), equalTo(1));
         assertThat(command.getY(), equalTo(2));
         assertThat(command.getFacingDirection(), equalTo(Direction.NORTH));
@@ -45,7 +35,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_only_accept_all_uppercase_PLACE_command() throws InvalidCommandException {
         try {
-            PlaceCommand.parse(robot, "place 1,2,NORTH");
+            PlaceCommand.parse("place 1,2,NORTH");
             fail("Should have failed due to invalid command");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("place 1,2,NORTH"));
@@ -55,7 +45,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_only_accept_all_uppercase_direction() throws InvalidCommandException {
         try {
-            PlaceCommand.parse(robot, "PLACE 1,2,north");
+            PlaceCommand.parse("PLACE 1,2,north");
             fail("Should have failed due to invalid direction");
         } catch (InvalidDirectionException e) {
             assertThat(e.getDirection(), equalTo("north"));
@@ -65,7 +55,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_command_has_extra_arbitrary_string() throws InvalidCommandException {
         try {
-            PlaceCommand.parse(robot, "PLACE 1,2,NORTH fofofooof");
+            PlaceCommand.parse("PLACE 1,2,NORTH fofofooof");
             fail("Should have failed due to invalid command");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1,2,NORTH fofofooof"));
@@ -75,7 +65,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_command_appears_in_middle_of_arbitrary_string() throws InvalidCommandException {
         try {
-            PlaceCommand.parse(robot, "here is some arbitrary string PLACE 1,2,NORTH ");
+            PlaceCommand.parse("here is some arbitrary string PLACE 1,2,NORTH ");
             fail("Should have failed due to invalid command");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("here is some arbitrary string PLACE 1,2,NORTH"));
@@ -85,7 +75,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_alphabetic_x_coordinate() throws InvalidCommandException {
         try {
-            PlaceCommand.parse(robot, "PLACE a,2,NORTH");
+            PlaceCommand.parse("PLACE a,2,NORTH");
             fail("Should have failed due to non integer x coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE a,2,NORTH"));
@@ -95,7 +85,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_float_x_coordinate() throws InvalidCommandException {
         try {
-            PlaceCommand.parse(robot, "PLACE 1.2,2,NORTH");
+            PlaceCommand.parse("PLACE 1.2,2,NORTH");
             fail("Should have failed due to non integer x coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1.2,2,NORTH"));
@@ -105,7 +95,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_alphabetic_y_coordinate() throws InvalidCommandException {
         try {
-            PlaceCommand.parse(robot, "PLACE 1,b,NORTH");
+            PlaceCommand.parse("PLACE 1,b,NORTH");
             fail("Should have failed due to non integer y coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1,b,NORTH"));
@@ -115,7 +105,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_float_y_coordinate() throws InvalidCommandException {
         try {
-            PlaceCommand.parse(robot, "PLACE 1,2.1,NORTH");
+            PlaceCommand.parse("PLACE 1,2.1,NORTH");
             fail("Should have failed due to non integer y coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1,2.1,NORTH"));
@@ -125,7 +115,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_negative_x_coordinate() throws InvalidCommandException {
         try{
-            PlaceCommand.parse(robot, "PLACE -1,2,NORTH");
+            PlaceCommand.parse("PLACE -1,2,NORTH");
             fail("Should have failed due to negative x coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE -1,2,NORTH"));
@@ -135,7 +125,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_negative_y_coordinate() throws InvalidCommandException {
         try{
-            PlaceCommand.parse(robot, "PLACE 1,-2,NORTH");
+            PlaceCommand.parse("PLACE 1,-2,NORTH");
             fail("Should have failed due to negative y coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1,-2,NORTH"));
@@ -145,7 +135,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_not_given_any_coordinate() throws InvalidCommandException {
         try {
-            PlaceCommand.parse(robot, "PLACE NORTH");
+            PlaceCommand.parse("PLACE NORTH");
             fail("Should have failed due to invalid coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE NORTH"));
@@ -155,7 +145,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_more_than_two_integers_for_coordinate() throws InvalidCommandException {
         try {
-            PlaceCommand.parse(robot, "PLACE 1,2,3 NORTH");
+            PlaceCommand.parse("PLACE 1,2,3 NORTH");
             fail("Should have failed due to invalid coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1,2,3 NORTH"));
@@ -165,7 +155,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_only_one_integer_for_coordinate() throws InvalidCommandException {
         try {
-            PlaceCommand.parse(robot, "PLACE 1 NORTH");
+            PlaceCommand.parse("PLACE 1 NORTH");
             fail("Should have failed due to invalid coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1 NORTH"));
@@ -175,7 +165,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_not_given_direction() throws InvalidCommandException {
         try {
-            PlaceCommand.parse(robot, "PLACE 1,2");
+            PlaceCommand.parse("PLACE 1,2");
             fail("Should have failed due to missing direction");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1,2"));
@@ -186,7 +176,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_invalid_direction() throws InvalidCommandException {
         try {
-            PlaceCommand.parse(robot, "PLACE 1,2,CENTER");
+            PlaceCommand.parse("PLACE 1,2,CENTER");
             fail("Should have failed due to invalid direction");
         } catch (InvalidDirectionException e) {
             assertThat(e.getDirection(), equalTo("CENTER"));
@@ -196,7 +186,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_command_does_not_start_with_PLACE_keyword() throws InvalidCommandException {
         try {
-            PlaceCommand.parse(robot, "FOO 1,2,SOUTH");
+            PlaceCommand.parse("FOO 1,2,SOUTH");
             fail("Should have failed due to invalid direction");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("FOO 1,2,SOUTH"));
@@ -206,7 +196,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_more_than_one_place_command() throws InvalidCommandException {
         try {
-            PlaceCommand.parse(robot, "PLACE 1,2,NORTH PLACE 1,2,NORTH");
+            PlaceCommand.parse("PLACE 1,2,NORTH PLACE 1,2,NORTH");
             fail("Should have failed due to invalid command");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1,2,NORTH PLACE 1,2,NORTH"));

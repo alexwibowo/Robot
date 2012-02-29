@@ -10,11 +10,7 @@ import au.com.anz.robot.model.Robot;
 public class ReportCommand extends AbstractCommand{
     public static final String COMMAND = "REPORT";
 
-    public ReportCommand(Robot robot) {
-        super(robot);
-    }
-
-    public void execute() {
-        System.out.println(getRobot().toString());
+    public void execute(Robot robot) {
+        System.out.println(robot.toString());
     }
 }

@@ -20,19 +20,19 @@ public class MoveCommandUnitTest {
 
     @Before
     public void setup() {
-        moveCommand = new MoveCommand(robot);
+        moveCommand = new MoveCommand();
     }
 
     @Test
     public void should_only_invoke_move_forward_on_robot_once() {
-        moveCommand.execute();
+        moveCommand.execute(robot);
 
         verify(robot, times(1)).moveForward();
     }
 
     @Test
     public void should_not_invoke_anything_else_on_robot() {
-        moveCommand.execute();
+        moveCommand.execute(robot);
 
         verify(robot).moveForward();
         verifyNoMoreInteractions(robot);

@@ -30,20 +30,18 @@ public class PlaceCommand extends AbstractCommand{
     private final Direction facingDirection;
 
     /**
-     * @param robot {@link Robot} instance
      * @param x x-coordinate where the robot will be placed
      * @param y y-coordinate where the robot will be placed
      * @param facingDirection direction where the robot will face
      */
-    public PlaceCommand(Robot robot, int x, int y, Direction facingDirection) {
-        super(robot);
+    public PlaceCommand(int x, int y, Direction facingDirection) {
         checkNotNull(facingDirection);
         this.x=x;
         this.y=y;
         this.facingDirection = facingDirection;
     }
 
-    public void execute() {
+    public void execute(Robot robot) {
         if (robot.getBoard().isValidPosition(x, y)) {
             robot.setX(x);
             robot.setY(y);
@@ -68,12 +66,11 @@ public class PlaceCommand extends AbstractCommand{
     /**
      * Parse a command string as a <code>PLACE</code> command.
      * <p/>
-     * @param robot {@link Robot} instance
      * @param commandString command string to be parsed
      * @return instance of {@link PlaceCommand} command object
      * @throws InvalidCommandException on failure to parse the command string
      */
-    public static PlaceCommand parse(Robot robot, String commandString) 
+    public static PlaceCommand parse(String commandString)
             throws InvalidCommandException {
         Pattern pattern = compile("^\\s*PLACE\\s+(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\w+)\\s*");
         
@@ -84,7 +81,7 @@ public class PlaceCommand extends AbstractCommand{
             int x = parseInt(matcher.group(1));
             int y = parseInt(matcher.group(2));
             String direction = matcher.group(3);
-            return new PlaceCommand(robot, x, y, parseDirection(direction));
+            return new PlaceCommand(x, y, parseDirection(direction));
         }else {
             throw new MalformedCommandException(commandString);
         }
@@ -93,8 +90,9 @@ public class PlaceCommand extends AbstractCommand{
     /**
      * Parse the given string as a {@link Direction}
      * <p/>
-     * @param directionString
+     * @param directionString direction in string. Must correspond to {@link Direction}
      * @return instance of {@link Direction}
+     * @see Direction
      * @throws InvalidDirectionException on failure to parse the string as direction
      */
     private static Direction parseDirection(String directionString)

@@ -1,7 +1,5 @@
 package au.com.anz.robot.model;
 
-import com.google.common.base.Preconditions;
-
 import static com.google.common.base.Preconditions.checkArgument;
 
 /**

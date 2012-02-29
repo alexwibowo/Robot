@@ -28,7 +28,7 @@ public class PlaceCommandUnitTest {
 
     @Test
     public void should_ignore_command_when_given_negative_x_coordinate() {
-        new PlaceCommand(robot, -1, 3, Direction.WEST).execute();
+        new PlaceCommand(-1, 3, Direction.WEST).execute(robot);
         assertThat(robot.getX(), equalTo(3));
         assertThat(robot.getY(), equalTo(3));
         assertThat(robot.getFacingDirection(), equalTo(Direction.NORTH));
@@ -36,7 +36,7 @@ public class PlaceCommandUnitTest {
 
     @Test
     public void should_ignore_command_when_given_x_coordinate_beyond_board_width() {
-        new PlaceCommand(robot, 5, 3, Direction.WEST).execute();
+        new PlaceCommand(5, 3, Direction.WEST).execute(robot);
         assertThat(robot.getX(), equalTo(3));
         assertThat(robot.getY(), equalTo(3));
         assertThat(robot.getFacingDirection(), equalTo(Direction.NORTH));
@@ -45,7 +45,7 @@ public class PlaceCommandUnitTest {
 
     @Test
     public void should_ignore_command_when_given_negative_y_coordinate() {
-        new PlaceCommand(robot, 3, -1, Direction.WEST).execute();
+        new PlaceCommand(3, -1, Direction.WEST).execute(robot);
         assertThat(robot.getX(), equalTo(3));
         assertThat(robot.getY(), equalTo(3));
         assertThat(robot.getFacingDirection(), equalTo(Direction.NORTH));
@@ -54,7 +54,7 @@ public class PlaceCommandUnitTest {
 
     @Test
     public void should_ignore_command_when_given_y_coordinate_beyond_board_height() {
-        new PlaceCommand(robot, 3, 5, Direction.WEST).execute();
+        new PlaceCommand(3, 5, Direction.WEST).execute(robot);
         assertThat(robot.getX(), equalTo(3));
         assertThat(robot.getY(), equalTo(3));
         assertThat(robot.getFacingDirection(), equalTo(Direction.NORTH));
@@ -62,13 +62,13 @@ public class PlaceCommandUnitTest {
 
     @Test
     public void given_valid_coordinate__THEN__should_set_robot_to_the_correct_facing_direction() {
-        new PlaceCommand(robot, 1, 1, Direction.WEST).execute();
+        new PlaceCommand(1, 1, Direction.WEST).execute(robot);
         assertThat(robot.getFacingDirection(), equalTo(Direction.WEST));
     }
 
     @Test
     public void given_valid_coordinate__THEN__should_set_robot_coordinate_to_the_given_coordinate() {
-        new PlaceCommand(robot, 1, 1, Direction.WEST).execute();
+        new PlaceCommand(1, 1, Direction.WEST).execute(robot);
         assertThat(robot.getX(), equalTo(1));
         assertThat(robot.getY(), equalTo(1));
     }

@@ -26,19 +26,19 @@ public class LeftCommandUnitTest {
 
     @Before
     public void setup() {
-        leftCommand = new LeftCommand(robot);
+        leftCommand = new LeftCommand();
     }
 
     @Test
     public void should_only_invoke_turn_left_on_robot_once() {
-        leftCommand.execute();
+        leftCommand.execute(robot);
 
         verify(robot, times(1)).turnLeft();
     }
 
     @Test
     public void should_not_invoke_anything_else_on_robot() {
-        leftCommand.execute();
+        leftCommand.execute(robot);
 
         verify(robot).turnLeft();
         verifyNoMoreInteractions(robot);

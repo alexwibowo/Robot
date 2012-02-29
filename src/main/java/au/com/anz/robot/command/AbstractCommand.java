@@ -1,7 +1,5 @@
 package au.com.anz.robot.command;
 
-import au.com.anz.robot.model.Robot;
-
 /**
  * User: agwibowo
  * Date: 28/02/12
@@ -9,13 +7,4 @@ import au.com.anz.robot.model.Robot;
  */
 public abstract class AbstractCommand implements Command{
 
-    protected Robot robot;
-
-    public AbstractCommand(Robot robot) {
-        this.robot = robot;
-    }
-
-    public Robot getRobot() {
-        return robot;
-    }
 }

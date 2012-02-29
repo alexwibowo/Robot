@@ -13,14 +13,11 @@ import static org.hamcrest.Matchers.equalTo;
  */
 public class RobotMoveForwardUnitTest {
 
-    private Board board;
-
     private Robot robot;
 
     @Before
     public void setup() {
-        board = new Board(5, 5);
-        robot = new Robot(board);
+        robot = new Robot(new Board(5, 5));
         robot.setX(3);
         robot.setY(3);
     }

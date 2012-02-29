@@ -13,11 +13,7 @@ import au.com.anz.robot.model.Robot;
 public class MoveCommand extends AbstractCommand {
     public static final String COMMAND = "MOVE";
 
-    public MoveCommand(Robot robot) {
-        super(robot);
-    }
-
-    public void execute() {
+    public void execute(Robot robot) {
         robot.moveForward();
     }
 }

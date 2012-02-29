@@ -25,19 +25,19 @@ public class RightCommandUnitTest {
 
     @Before
     public void setup() {
-        rightCommand = new RightCommand(robot);
+        rightCommand = new RightCommand();
     }
 
     @Test
     public void should_only_invoke_turn_right_on_robot_once() {
-        rightCommand.execute();
+        rightCommand.execute(robot);
 
         verify(robot, times(1)).turnRight();
     }
 
     @Test
     public void should_not_invoke_anything_else_on_robot() {
-        rightCommand.execute();
+        rightCommand.execute(robot);
 
         verify(robot).turnRight();
         verifyNoMoreInteractions(robot);

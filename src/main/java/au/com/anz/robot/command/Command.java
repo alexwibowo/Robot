@@ -1,5 +1,7 @@
 package au.com.anz.robot.command;
 
+import au.com.anz.robot.model.Robot;
+
 /**
  * User: agwibowo
  * Date: 28/02/12
@@ -7,5 +9,10 @@ package au.com.anz.robot.command;
  */
 public interface Command {
 
-    void execute();
+    /**
+     * Execute the command on the robot
+     * <p/>
+     * @param robot {@link Robot}
+     */
+    void execute(Robot robot);
 }

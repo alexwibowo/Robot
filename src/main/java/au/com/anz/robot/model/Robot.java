@@ -15,7 +15,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class Robot {
     private static final Logger LOGGER = LoggerFactory.getLogger(Robot.class.getName());
-    
+
+    /**
+     * The board where the robot will be on
+     */
     private Board board;
 
     private int x;
@@ -28,6 +31,7 @@ public class Robot {
         x = 0;
         y = 0;
         facingDirection = Direction.NORTH;
+        checkNotNull(board);
         this.board = board;
     }
 
@@ -60,6 +64,11 @@ public class Robot {
         this.facingDirection = facingDirection;
     }
 
+    /**
+     * Move the robot one unit forward, in the direction where it is currently facing ({@link #facingDirection}
+     * If the new location will mean the robot falling off from the board {@link Board}, then the robot
+     * will stay in the current location, still facing the same direction.
+     */
     public void moveForward() {
         LOGGER.debug("Performing move forward");
 
@@ -89,12 +98,13 @@ public class Robot {
             setX(newX);
             setY(newY);
         }else{
+            // new position is invalid - robot will fall off the table.
             LOGGER.debug("Robot is not moving forward, as new position is invalid [{},{}]",newX, newY);    
         }
     }
 
     /**
-     * Turn the robot 90 degree to the left
+     * Turn the robot 90 degree to the left. Robot will stay in the current location.
      */
     public void turnLeft() {
         LOGGER.debug("Performing turn left");
@@ -117,7 +127,7 @@ public class Robot {
     }
 
     /**
-     * Turn the robot 90 degree to the right
+     * Turn the robot 90 degree to the right. Robot will stay in the current location.
      */
     public void turnRight(){
         LOGGER.debug("Performing turn right");
