@@ -13,6 +13,9 @@ public class MalformedCommandException extends InvalidCommandException{
 
     private final String commandString;
 
+    /**
+     * @param commandString command string
+     */
     public MalformedCommandException(String commandString) {
         super(String.format("Unknown command has been given [%s]", commandString));
         this.commandString = trim(commandString);

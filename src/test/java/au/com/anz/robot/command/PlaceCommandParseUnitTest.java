@@ -16,17 +16,23 @@ public class PlaceCommandParseUnitTest {
 
     @Test
     public void should_be_able_to_parse_correctly_formatted_string() throws InvalidCommandException {
-        PlaceCommand command = PlaceCommand.parse("PLACE 1,2,NORTH");
+        PlaceCommand command = PlaceCommand.createFromString("PLACE 1,2,NORTH");
         assertThat(command.getX(), equalTo(1));
         assertThat(command.getY(), equalTo(2));
         assertThat(command.getFacingDirection(), equalTo(Direction.NORTH));
     }
 
-
+    @Test
+    public void should_be_able_to_handle_leading_zeroes_in_coordinate() throws InvalidCommandException {
+        PlaceCommand command = PlaceCommand.createFromString("PLACE 01,0002,NORTH");
+        assertThat(command.getX(), equalTo(1));
+        assertThat(command.getY(), equalTo(2));
+        assertThat(command.getFacingDirection(), equalTo(Direction.NORTH));
+    }
 
     @Test
     public void should_be_able_to_handle_whitespaces() throws InvalidCommandException {
-        PlaceCommand command = PlaceCommand.parse("  PLACE         1,\t 2,  NORTH   ");
+        PlaceCommand command = PlaceCommand.createFromString("  PLACE         1,\t 2,  NORTH   ");
         assertThat(command.getX(), equalTo(1));
         assertThat(command.getY(), equalTo(2));
         assertThat(command.getFacingDirection(), equalTo(Direction.NORTH));
@@ -35,7 +41,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_only_accept_all_uppercase_PLACE_command() throws InvalidCommandException {
         try {
-            PlaceCommand.parse("place 1,2,NORTH");
+            PlaceCommand.createFromString("place 1,2,NORTH");
             fail("Should have failed due to invalid command");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("place 1,2,NORTH"));
@@ -45,7 +51,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_only_accept_all_uppercase_direction() throws InvalidCommandException {
         try {
-            PlaceCommand.parse("PLACE 1,2,north");
+            PlaceCommand.createFromString("PLACE 1,2,north");
             fail("Should have failed due to invalid direction");
         } catch (InvalidDirectionException e) {
             assertThat(e.getDirection(), equalTo("north"));
@@ -55,7 +61,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_command_has_extra_arbitrary_string() throws InvalidCommandException {
         try {
-            PlaceCommand.parse("PLACE 1,2,NORTH fofofooof");
+            PlaceCommand.createFromString("PLACE 1,2,NORTH fofofooof");
             fail("Should have failed due to invalid command");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1,2,NORTH fofofooof"));
@@ -65,7 +71,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_command_appears_in_middle_of_arbitrary_string() throws InvalidCommandException {
         try {
-            PlaceCommand.parse("here is some arbitrary string PLACE 1,2,NORTH ");
+            PlaceCommand.createFromString("here is some arbitrary string PLACE 1,2,NORTH ");
             fail("Should have failed due to invalid command");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("here is some arbitrary string PLACE 1,2,NORTH"));
@@ -75,7 +81,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_alphabetic_x_coordinate() throws InvalidCommandException {
         try {
-            PlaceCommand.parse("PLACE a,2,NORTH");
+            PlaceCommand.createFromString("PLACE a,2,NORTH");
             fail("Should have failed due to non integer x coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE a,2,NORTH"));
@@ -85,7 +91,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_float_x_coordinate() throws InvalidCommandException {
         try {
-            PlaceCommand.parse("PLACE 1.2,2,NORTH");
+            PlaceCommand.createFromString("PLACE 1.2,2,NORTH");
             fail("Should have failed due to non integer x coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1.2,2,NORTH"));
@@ -95,7 +101,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_alphabetic_y_coordinate() throws InvalidCommandException {
         try {
-            PlaceCommand.parse("PLACE 1,b,NORTH");
+            PlaceCommand.createFromString("PLACE 1,b,NORTH");
             fail("Should have failed due to non integer y coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1,b,NORTH"));
@@ -105,7 +111,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_float_y_coordinate() throws InvalidCommandException {
         try {
-            PlaceCommand.parse("PLACE 1,2.1,NORTH");
+            PlaceCommand.createFromString("PLACE 1,2.1,NORTH");
             fail("Should have failed due to non integer y coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1,2.1,NORTH"));
@@ -115,7 +121,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_negative_x_coordinate() throws InvalidCommandException {
         try{
-            PlaceCommand.parse("PLACE -1,2,NORTH");
+            PlaceCommand.createFromString("PLACE -1,2,NORTH");
             fail("Should have failed due to negative x coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE -1,2,NORTH"));
@@ -125,7 +131,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_negative_y_coordinate() throws InvalidCommandException {
         try{
-            PlaceCommand.parse("PLACE 1,-2,NORTH");
+            PlaceCommand.createFromString("PLACE 1,-2,NORTH");
             fail("Should have failed due to negative y coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1,-2,NORTH"));
@@ -135,7 +141,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_not_given_any_coordinate() throws InvalidCommandException {
         try {
-            PlaceCommand.parse("PLACE NORTH");
+            PlaceCommand.createFromString("PLACE NORTH");
             fail("Should have failed due to invalid coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE NORTH"));
@@ -145,7 +151,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_more_than_two_integers_for_coordinate() throws InvalidCommandException {
         try {
-            PlaceCommand.parse("PLACE 1,2,3 NORTH");
+            PlaceCommand.createFromString("PLACE 1,2,3 NORTH");
             fail("Should have failed due to invalid coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1,2,3 NORTH"));
@@ -155,7 +161,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_only_one_integer_for_coordinate() throws InvalidCommandException {
         try {
-            PlaceCommand.parse("PLACE 1 NORTH");
+            PlaceCommand.createFromString("PLACE 1 NORTH");
             fail("Should have failed due to invalid coordinate");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1 NORTH"));
@@ -165,7 +171,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_not_given_direction() throws InvalidCommandException {
         try {
-            PlaceCommand.parse("PLACE 1,2");
+            PlaceCommand.createFromString("PLACE 1,2");
             fail("Should have failed due to missing direction");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1,2"));
@@ -176,7 +182,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_invalid_direction() throws InvalidCommandException {
         try {
-            PlaceCommand.parse("PLACE 1,2,CENTER");
+            PlaceCommand.createFromString("PLACE 1,2,CENTER");
             fail("Should have failed due to invalid direction");
         } catch (InvalidDirectionException e) {
             assertThat(e.getDirection(), equalTo("CENTER"));
@@ -186,7 +192,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_command_does_not_start_with_PLACE_keyword() throws InvalidCommandException {
         try {
-            PlaceCommand.parse("FOO 1,2,SOUTH");
+            PlaceCommand.createFromString("FOO 1,2,SOUTH");
             fail("Should have failed due to invalid direction");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("FOO 1,2,SOUTH"));
@@ -196,7 +202,7 @@ public class PlaceCommandParseUnitTest {
     @Test
     public void should_throw_exception_when_given_more_than_one_place_command() throws InvalidCommandException {
         try {
-            PlaceCommand.parse("PLACE 1,2,NORTH PLACE 1,2,NORTH");
+            PlaceCommand.createFromString("PLACE 1,2,NORTH PLACE 1,2,NORTH");
             fail("Should have failed due to invalid command");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1,2,NORTH PLACE 1,2,NORTH"));

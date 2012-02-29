@@ -41,7 +41,7 @@ public class RobotMoveForwardUnitTest {
     @Test
     public void WHEN_facing_top_edge__THEN__robot_should_stay() {
         //given
-        robot.setY(0);
+        robot.setY(4);
         robot.setFacingDirection(Direction.NORTH);
 
         //when
@@ -49,7 +49,7 @@ public class RobotMoveForwardUnitTest {
 
         // then
         assertThat(robot.getX(), equalTo(3));
-        assertThat(robot.getY(), equalTo(0));
+        assertThat(robot.getY(), equalTo(4));
         assertThat("Robot should not change facing direction when moving forward",
                 robot.getFacingDirection(), equalTo(Direction.NORTH));
 
@@ -75,7 +75,7 @@ public class RobotMoveForwardUnitTest {
     @Test
     public void WHEN_facing_bottom_edge__THEN__robot_should_stay() {
         //given
-        robot.setY(4);
+        robot.setY(0);
         robot.setFacingDirection(Direction.SOUTH);
 
         //when
@@ -91,7 +91,7 @@ public class RobotMoveForwardUnitTest {
     @Test
     public void WHEN_facing_north__THEN__moving_forward_should_move_robot_up_by_one_unit() {
         //given
-        robot.setY(4);
+        robot.setY(2);
         robot.setFacingDirection(Direction.NORTH);
 
         //when
@@ -107,7 +107,7 @@ public class RobotMoveForwardUnitTest {
     @Test
     public void WHEN_facing_south__THEN__moving_forward_should_move_robot_down_by_one_unit() {
         //given
-        robot.setY(3);
+        robot.setY(2);
         robot.setFacingDirection(Direction.SOUTH);
 
         //when
@@ -115,7 +115,7 @@ public class RobotMoveForwardUnitTest {
 
         // then
         assertThat(robot.getX(), equalTo(3));
-        assertThat(robot.getY(), equalTo(4));
+        assertThat(robot.getY(), equalTo(1));
         assertThat("Robot should not change facing direction when moving forward",
                 robot.getFacingDirection(), equalTo(Direction.SOUTH));
 

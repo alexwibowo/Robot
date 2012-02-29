@@ -10,6 +10,9 @@ package au.com.anz.robot.command;
 public class InvalidDirectionException extends InvalidCommandException {
     private final String direction;
 
+    /**
+     * @param direction the direction
+     */
     public InvalidDirectionException(String direction) {
         super(String.format("Invalid direction has been given [%s]",direction));
         this.direction = direction;

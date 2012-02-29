@@ -78,13 +78,13 @@ public class Robot {
         
         switch (facingDirection) {
             case NORTH:
-                newY = getY() - 1;
+                newY = getY() + 1;
                 break;
             case EAST:
                 newX = getX() + 1;
                 break;
             case SOUTH:
-                newY = getY() + 1;
+                newY = getY() - 1;
                 break;
             case WEST:
                 newX = getX() - 1;

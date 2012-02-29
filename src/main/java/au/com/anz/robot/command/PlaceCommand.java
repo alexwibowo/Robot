@@ -2,6 +2,7 @@ package au.com.anz.robot.command;
 
 import au.com.anz.robot.model.Direction;
 import au.com.anz.robot.model.Robot;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,19 +15,46 @@ import static java.lang.Integer.parseInt;
 import static java.util.regex.Pattern.compile;
 
 /**
+ * A command to move the robot to a given coordinate & facing a given direction.
+ * The command must be in the following pattern:
+ *
+ * <pre>
+ *      <PLACE_TOKEN><WHITESPACE>+<COORDINATE><WHITESPACE>+
+ *
+ * where:
+ *  1) <PLACE_TOKEN> is the "PLACE" keyword
+ *  2) <WHITESPACE> is one or more whitespace character
+ *  3) <COORDINATE> is in the form of
+ *
+ *      <DIGIT><WHITESPACE>*,<WHITESPACE>*<DIGIT><WHITESPACE>*,<DIRECTION>
+ *  where
+ *  1) DIGIT is [0-9]+
+ *  2) DIRECTION is [NORTH|SOUTH|EAST|WEST]
+ *
+ * </pre>
+ * <p/>
+ *
+ * Example
+ * <pre>
+ *     PLACE 0,0,NORTH
+ *     PLACE 0,1,EAST
+ * </pre>
+ * <p/>
  * User: agwibowo
  * Date: 28/02/12
  * Time: 11:19 PM
  */
 public class PlaceCommand extends AbstractCommand{
     private static final Logger LOGGER = LoggerFactory.getLogger(PlaceCommand.class.getName());
-    
+
     public static final String COMMAND = "PLACE";
- 
+    
+    private static final Pattern SUPPORTED_PATTERN = compile("^\\s*PLACE\\s+(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\w+)\\s*");
+
     private final int x;
-    
+
     private final int y;
-    
+
     private final Direction facingDirection;
 
     /**
@@ -39,16 +67,6 @@ public class PlaceCommand extends AbstractCommand{
         this.x=x;
         this.y=y;
         this.facingDirection = facingDirection;
-    }
-
-    public void execute(Robot robot) {
-        if (robot.getBoard().isValidPosition(x, y)) {
-            robot.setX(x);
-            robot.setY(y);
-            robot.setFacingDirection(facingDirection);
-        }else{
-            LOGGER.warn("Coordinate [{},{}] is not valid with respect to the board. Ignoring the command", x, y);
-        }
     }
 
     public int getX() {
@@ -64,44 +82,44 @@ public class PlaceCommand extends AbstractCommand{
     }
 
     /**
-     * Parse a command string as a <code>PLACE</code> command.
-     * <p/>
-     * @param commandString command string to be parsed
-     * @return instance of {@link PlaceCommand} command object
-     * @throws InvalidCommandException on failure to parse the command string
+     * @param commandString command string
+     * @return <code>true</code> if the command can be supported by this class,
+     * <code>false</code> otherwise
      */
-    public static PlaceCommand parse(String commandString)
-            throws InvalidCommandException {
-        Pattern pattern = compile("^\\s*PLACE\\s+(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\w+)\\s*");
-        
-        Matcher matcher = pattern.matcher(commandString);
-        
-        if (matcher.find() 
-                && matcher.hitEnd()) { // we dont want any extras. We want to be strict.
-            int x = parseInt(matcher.group(1));
-            int y = parseInt(matcher.group(2));
-            String direction = matcher.group(3);
-            return new PlaceCommand(x, y, parseDirection(direction));
-        }else {
-            throw new MalformedCommandException(commandString);
+    public static boolean hasSupportFor(String commandString) {
+        return StringUtils.startsWith(commandString, PlaceCommand.COMMAND);
+    }
+
+    @Override
+    public void execute(Robot robot) {
+        if (robot.getBoard().isValidPosition(x, y)) {
+            robot.setX(x);
+            robot.setY(y);
+            robot.setFacingDirection(facingDirection);
+        }else{
+            LOGGER.warn("Coordinate [{},{}] is not valid with respect to the board. Ignoring the command", x, y);
         }
     }
 
     /**
-     * Parse the given string as a {@link Direction}
+     * Parse a command string as a <code>PLACE</code> command.
      * <p/>
-     * @param directionString direction in string. Must correspond to {@link Direction}
-     * @return instance of {@link Direction}
-     * @see Direction
-     * @throws InvalidDirectionException on failure to parse the string as direction
+     * @param commandString command string to be parsed
+     * @return instance of {@link PlaceCommand} command object
+     * @throws InvalidCommandException on failure to createFromString the command string
      */
-    private static Direction parseDirection(String directionString)
-            throws InvalidDirectionException {
-        try {
-            return valueOf(directionString);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidDirectionException(directionString);
+    public static PlaceCommand createFromString(String commandString)
+            throws InvalidCommandException {
+        Matcher matcher = SUPPORTED_PATTERN.matcher(commandString);
+
+        if (matcher.find()
+                && matcher.hitEnd()) { // we dont want any extras. We want to be strict.
+            int x = parseInt(matcher.group(1));
+            int y = parseInt(matcher.group(2));
+            String direction = matcher.group(3);
+            return new PlaceCommand(x, y, Direction.parseSafely(direction));
+        }else {
+            throw new MalformedCommandException(commandString);
         }
     }
-
 }
