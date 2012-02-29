@@ -13,39 +13,39 @@ import static org.hamcrest.Matchers.instanceOf;
 public class CommandParserUnitTest {
     @Test
     public void should_recognize_MOVE_command() throws InvalidCommandException {
-        assertThat(CommandParser.parse("MOVE"), instanceOf(MoveCommand.class));
-        assertThat(CommandParser.parse(" MOVE "), instanceOf(MoveCommand.class));
-        assertThat(CommandParser.parse("MOVE\n"), instanceOf(MoveCommand.class));
-        assertThat(CommandParser.parse("\tMOVE\t"), instanceOf(MoveCommand.class));
+        assertThat(CommandParser.fromString("MOVE"), instanceOf(MoveCommand.class));
+        assertThat(CommandParser.fromString(" MOVE "), instanceOf(MoveCommand.class));
+        assertThat(CommandParser.fromString("MOVE\n"), instanceOf(MoveCommand.class));
+        assertThat(CommandParser.fromString("\tMOVE\t"), instanceOf(MoveCommand.class));
     }
 
     @Test
     public void should_recognize_LEFT_command() throws InvalidCommandException {
-        assertThat(CommandParser.parse("LEFT"), instanceOf(LeftCommand.class));
-        assertThat(CommandParser.parse(" LEFT "), instanceOf(LeftCommand.class));
-        assertThat(CommandParser.parse("LEFT\n"), instanceOf(LeftCommand.class));
-        assertThat(CommandParser.parse("\tLEFT\t"), instanceOf(LeftCommand.class));
+        assertThat(CommandParser.fromString("LEFT"), instanceOf(LeftCommand.class));
+        assertThat(CommandParser.fromString(" LEFT "), instanceOf(LeftCommand.class));
+        assertThat(CommandParser.fromString("LEFT\n"), instanceOf(LeftCommand.class));
+        assertThat(CommandParser.fromString("\tLEFT\t"), instanceOf(LeftCommand.class));
     }
 
     @Test
     public void should_recognize_RIGHT_command() throws InvalidCommandException {
-        assertThat(CommandParser.parse("RIGHT"), instanceOf(RightCommand.class));
-        assertThat(CommandParser.parse(" RIGHT "), instanceOf(RightCommand.class));
-        assertThat(CommandParser.parse("RIGHT\n"), instanceOf(RightCommand.class));
-        assertThat(CommandParser.parse("\tRIGHT\t"), instanceOf(RightCommand.class));
+        assertThat(CommandParser.fromString("RIGHT"), instanceOf(RightCommand.class));
+        assertThat(CommandParser.fromString(" RIGHT "), instanceOf(RightCommand.class));
+        assertThat(CommandParser.fromString("RIGHT\n"), instanceOf(RightCommand.class));
+        assertThat(CommandParser.fromString("\tRIGHT\t"), instanceOf(RightCommand.class));
     }
 
     @Test
     public void should_recognize_PLACE_command() throws InvalidCommandException {
-        assertThat(CommandParser.parse("PLACE 0,1,NORTH"), instanceOf(PlaceCommand.class));
-        assertThat(CommandParser.parse(" PLACE 0,1,NORTH "), instanceOf(PlaceCommand.class));
-        assertThat(CommandParser.parse(" PLACE 0,1,NORTH\n"), instanceOf(PlaceCommand.class));
-        assertThat(CommandParser.parse(" PLACE 0,1,NORTH\t"), instanceOf(PlaceCommand.class));
+        assertThat(CommandParser.fromString("PLACE 0,1,NORTH"), instanceOf(PlaceCommand.class));
+        assertThat(CommandParser.fromString(" PLACE 0,1,NORTH "), instanceOf(PlaceCommand.class));
+        assertThat(CommandParser.fromString(" PLACE 0,1,NORTH\n"), instanceOf(PlaceCommand.class));
+        assertThat(CommandParser.fromString(" PLACE 0,1,NORTH\t"), instanceOf(PlaceCommand.class));
     }
 
     @Test(expected = MalformedCommandException.class)
     public void should_throw_exception_when_given_wrong_command() throws InvalidCommandException{
-        CommandParser.parse("VOODOO_CHICKEN");
+        CommandParser.fromString("VOODOO_CHICKEN");
     }
 
 

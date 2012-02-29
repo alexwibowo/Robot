@@ -15,7 +15,7 @@ import static java.lang.Integer.parseInt;
 import static java.util.regex.Pattern.compile;
 
 /**
- * A command to move the robot to a given coordinate & facing a given direction.
+ * A command to place the robot on the table, and move it to a given coordinate, facing a given direction.
  * The command must be in the following pattern:
  *
  * <pre>
@@ -90,12 +90,12 @@ public class PlaceCommand extends AbstractCommand{
         return StringUtils.startsWith(commandString, PlaceCommand.COMMAND);
     }
 
-    @Override
     public void execute(Robot robot) {
         if (robot.getBoard().isValidPosition(x, y)) {
             robot.setX(x);
             robot.setY(y);
             robot.setFacingDirection(facingDirection);
+            robot.setOnBoard(true);
         }else{
             LOGGER.warn("Coordinate [{},{}] is not valid with respect to the board. Ignoring the command", x, y);
         }

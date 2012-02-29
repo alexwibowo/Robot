@@ -1,5 +1,6 @@
 package au.com.anz.robot.model;
 
+import au.com.anz.robot.command.InvalidRobotMovementException;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -27,11 +28,13 @@ public class Robot {
 
     private Direction facingDirection;
 
+    private boolean onBoard;
+
     public Robot(Board board) {
         x = 0;
         y = 0;
-        facingDirection = Direction.NORTH;
         checkNotNull(board);
+        onBoard = false;
         this.board = board;
     }
 
@@ -64,18 +67,26 @@ public class Robot {
         this.facingDirection = facingDirection;
     }
 
+    public boolean isOnBoard() {
+        return onBoard;
+    }
+
+    public void setOnBoard(boolean onBoard) {
+        this.onBoard = onBoard;
+    }
+
     /**
      * Move the robot one unit forward, in the direction where it is currently facing ({@link #facingDirection}
      * If the new location will mean the robot falling off from the board {@link Board}, then the robot
      * will stay in the current location, still facing the same direction.
      */
-    public void moveForward() {
+    public void moveForward()
+            throws InvalidRobotMovementException {
         LOGGER.debug("Performing move forward");
 
+        validateRobotIsOnBoard();
         int newX = getX();
-        
         int newY = getY();
-        
         switch (facingDirection) {
             case NORTH:
                 newY = getY() + 1;
@@ -99,15 +110,22 @@ public class Robot {
             setY(newY);
         }else{
             // new position is invalid - robot will fall off the table.
-            LOGGER.debug("Robot is not moving forward, as new position is invalid [{},{}]",newX, newY);    
+            LOGGER.debug("Robot is not moving forward, as new position is invalid [{},{}]",newX, newY);
+        }
+    }
+
+    private void validateRobotIsOnBoard() throws InvalidRobotMovementException {
+        if (!isOnBoard()) {
+            throw new InvalidRobotMovementException("Robot is not on board");
         }
     }
 
     /**
      * Turn the robot 90 degree to the left. Robot will stay in the current location.
      */
-    public void turnLeft() {
+    public void turnLeft() throws InvalidRobotMovementException {
         LOGGER.debug("Performing turn left");
+        validateRobotIsOnBoard();
         switch (facingDirection) {
             case NORTH:
                 setFacingDirection(WEST);
@@ -129,8 +147,9 @@ public class Robot {
     /**
      * Turn the robot 90 degree to the right. Robot will stay in the current location.
      */
-    public void turnRight(){
+    public void turnRight() throws InvalidRobotMovementException {
         LOGGER.debug("Performing turn right");
+        validateRobotIsOnBoard();
         switch (facingDirection) {
             case NORTH:
                 setFacingDirection(EAST);
@@ -151,10 +170,14 @@ public class Robot {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)
-                .append("x", x)
-                .append("y", y)
-                .append("facing", facingDirection)
-                .toString();
+        if (isOnBoard()) {
+            return new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)
+                    .append("x", x)
+                    .append("y", y)
+                    .append("facing", facingDirection)
+                    .toString();
+        }else {
+            return "Robot is not on board yet";
+        }
     }
 }

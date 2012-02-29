@@ -33,8 +33,7 @@ public class MoveCommand extends AbstractCommand {
         return new MoveCommand();
     }
 
-    @Override
-    public void execute(Robot robot) {
+    public void execute(Robot robot) throws InvalidRobotMovementException {
         robot.moveForward();
     }
 }

@@ -36,8 +36,7 @@ public class RightCommand extends AbstractCommand{
     /**
      * @see au.com.anz.robot.model.Robot#turnRight()
      */
-    @Override
-    public void execute(Robot robot) {
+    public void execute(Robot robot) throws InvalidRobotMovementException {
         robot.turnRight();
     }
 }

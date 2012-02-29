@@ -2,6 +2,7 @@ package au.com.anz.robot.command;
 
 /**
  * Exception to indicate that an unknown direction had been issued.
+ * @see au.com.anz.robot.model.Direction for valid directions
  * <p/>
  * User: agwibowo
  * Date: 29/02/12

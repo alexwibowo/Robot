@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: agwibowo
@@ -71,6 +73,13 @@ public class PlaceCommandUnitTest {
         new PlaceCommand(1, 1, Direction.WEST).execute(robot);
         assertThat(robot.getX(), equalTo(1));
         assertThat(robot.getY(), equalTo(1));
+    }
+
+    @Test
+    public void given_valid_coordinate__THEN__should_set_robot_status_to_be_onBoard() {
+        assertFalse(robot.isOnBoard());
+        new PlaceCommand(1, 1, Direction.WEST).execute(robot);
+        assertTrue(robot.isOnBoard());
     }
 
 }

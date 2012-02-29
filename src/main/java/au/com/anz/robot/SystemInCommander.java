@@ -22,13 +22,11 @@ public class SystemInCommander implements Commander {
         reader = new BufferedReader(new InputStreamReader(System.in));
     }
 
-    @Override
     public String getNextCommand()
             throws IOException {
         return reader.readLine();
     }
     
-    @Override
     public void cleanup() {
         closeQuietly(reader);
     }

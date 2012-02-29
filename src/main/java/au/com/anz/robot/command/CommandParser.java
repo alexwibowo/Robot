@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import static org.apache.commons.lang.StringUtils.trim;
 
 /**
+ * Parser for {@link Command}
+ * <p/>
  * User: agwibowo
  * Date: 28/02/12
  * Time: 9:50 PM
@@ -22,7 +24,7 @@ public class CommandParser {
      * @return {@link Command} object that represents the passed in string
      * @throws InvalidCommandException
      */
-    public static Command parse(String commandString)
+    public static Command fromString(String commandString)
             throws InvalidCommandException {
         String trimmedCommand = trim(commandString);
 

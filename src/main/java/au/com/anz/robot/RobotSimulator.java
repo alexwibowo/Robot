@@ -9,7 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-import static au.com.anz.robot.command.CommandParser.parse;
+import static au.com.anz.robot.command.CommandParser.fromString;
+import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 /**
  * User: agwibowo
@@ -25,23 +26,33 @@ public class RobotSimulator {
 
     public RobotSimulator(Commander commandReader) {
         this.robot = new Robot(new Board(5, 5));
+        this.robot.setOnBoard(false);  // initially robot is not on the table yet.
         this.commandReader = commandReader;
     }
 
+    /**
+     * Run the simulation
+     */
     public void run() throws IOException {
         try {
             String commandString = null;
             while ((commandString = commandReader.getNextCommand()) != null) {
-                doExecuteCommand(commandString);
+                if (isNotBlank(commandString)) {
+                    doExecuteCommand(commandString);
+                }
             }
         } finally {
             commandReader.cleanup();
         }
     }
 
+    /**
+     * Execute single command string on the robot
+     * @param commandString command string
+     */
     private void doExecuteCommand(String commandString) {
         try {
-            Command command = parse(commandString);
+            Command command = fromString(commandString);
             command.execute(robot);
         } catch (InvalidCommandException e) {
             LOGGER.debug("Invalid command [{}]", e.getMessage());

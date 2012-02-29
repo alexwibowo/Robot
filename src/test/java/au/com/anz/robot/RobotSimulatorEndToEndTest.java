@@ -2,6 +2,7 @@ package au.com.anz.robot;
 
 import au.com.anz.robot.model.Direction;
 import au.com.anz.robot.model.Robot;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,6 +49,38 @@ public class RobotSimulatorEndToEndTest {
         assertThat(robot.getX(), equalTo(0));
         assertThat(robot.getY(), equalTo(1));
         assertThat(robot.getFacingDirection(), equalTo(Direction.NORTH));
+    }
+
+    @Test
+    public void should_be_able_to_handle_empty_initial_lines() throws IOException {
+        when(commander.getNextCommand())
+                .thenReturn("")
+                .thenReturn("  ")
+                .thenReturn("\t")
+                .thenReturn("PLACE 0,0,NORTH")
+                .thenReturn("MOVE")
+                .thenReturn(null);
+        robotSimulator.run();
+
+        assertThat(robot.getX(), equalTo(0));
+        assertThat(robot.getY(), equalTo(1));
+        assertThat(robot.getFacingDirection(), equalTo(Direction.NORTH));
+    }
+
+    @Test
+    public void should_ignore_commands_until_first_place_command() throws IOException {
+        when(commander.getNextCommand())
+                .thenReturn("")
+                .thenReturn("MOVE")
+                .thenReturn("MOVE")
+                .thenReturn("LEFT")
+                .thenReturn("MOVE")
+                .thenReturn(null);
+        robotSimulator.run();
+
+        assertThat(robot.getX(), equalTo(0));
+        assertThat(robot.getY(), equalTo(0));
+        assertThat(robot.getFacingDirection(), Matchers.nullValue());
     }
 
     @Test

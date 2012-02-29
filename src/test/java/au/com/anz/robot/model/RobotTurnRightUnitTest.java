@@ -1,5 +1,6 @@
 package au.com.anz.robot.model;
 
+import au.com.anz.robot.command.InvalidRobotMovementException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +34,7 @@ public class RobotTurnRightUnitTest {
     @Before
     public void setUp() throws Exception {
         robot = new Robot(new Board(5,5));
+        robot.setOnBoard(true);
     }
 
     @Parameterized.Parameters
@@ -47,7 +49,7 @@ public class RobotTurnRightUnitTest {
     }
 
     @Test
-    public void turn_right_test() {
+    public void turn_right_test() throws InvalidRobotMovementException {
         robot.setFacingDirection(initialDirection);
         robot.turnRight();
         assertThat(

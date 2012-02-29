@@ -36,8 +36,7 @@ public class LeftCommand extends AbstractCommand {
     /**
      * @see au.com.anz.robot.model.Robot#turnLeft()
      */
-    @Override
-    public void execute(Robot robot) {
+    public void execute(Robot robot) throws InvalidRobotMovementException {
         robot.turnLeft();
     }
 }
