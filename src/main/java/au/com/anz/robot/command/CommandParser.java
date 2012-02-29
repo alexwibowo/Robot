@@ -14,6 +14,8 @@ import static org.apache.commons.lang.StringUtils.trim;
 public class CommandParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandParser.class.getName());
 
+    private CommandParser(){}
+
     public static Command parse(String commandString)
             throws InvalidCommandException {
         String trimmedCommand = trim(commandString);
@@ -29,7 +31,7 @@ public class CommandParser {
             return PlaceCommand.parse(commandString);
         } else{
             LOGGER.warn("Unknown command had been given [{}]", commandString);
-            throw new UnsupportedOperationException(commandString);
+            throw new MalformedCommandException(commandString);
         }
     }
 
