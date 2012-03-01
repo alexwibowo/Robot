@@ -3,15 +3,24 @@ package au.com.anz.robot.command;
 import au.com.anz.robot.model.Robot;
 import org.apache.commons.lang.StringUtils;
 
+import java.io.PrintStream;
+
 /**
  * A command to print the current location of the robot
  * <p/>
  * User: agwibowo
- * Date: 28/02/12
- * Time: 9:56 PM
  */
-public class ReportCommand extends AbstractCommand{
+public class ReportCommand implements Command{
     public static final String COMMAND = "REPORT";
+
+    private PrintStream printStream;
+
+    /**
+     * @param printStream printstream to write output to
+     */
+    public ReportCommand(PrintStream printStream) {
+        this.printStream = printStream;
+    }
 
     /**
      * @param commandString command string
@@ -28,12 +37,12 @@ public class ReportCommand extends AbstractCommand{
      * @param commandString command string
      * @return instance of {@link ReportCommand} command
      */
-    public static ReportCommand createFromString(String commandString) {
+    public static ReportCommand createFromString(PrintStream printStream, String commandString) {
         // there is no extra information contained in the REPORT command.
-        return new ReportCommand();
+        return new ReportCommand(printStream);
     }
 
     public void execute(Robot robot) {
-        System.out.println(robot.toString());
+        printStream.println(robot.toString());
     }
 }

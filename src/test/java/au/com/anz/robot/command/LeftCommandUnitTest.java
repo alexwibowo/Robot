@@ -15,8 +15,6 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 /**
  * User: agwibowo
- * Date: 28/02/12
- * Time: 9:40 PM
  */
 @RunWith(MockitoJUnitRunner.class)
 public class LeftCommandUnitTest {

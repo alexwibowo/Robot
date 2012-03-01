@@ -1,22 +1,23 @@
 package au.com.anz.robot;
 
 import au.com.anz.robot.command.Command;
+import au.com.anz.robot.command.CommandParser;
 import au.com.anz.robot.command.InvalidCommandException;
 import au.com.anz.robot.model.Board;
 import au.com.anz.robot.model.Robot;
+import com.google.common.base.Preconditions;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.PrintStream;
 
-import static au.com.anz.robot.command.CommandParser.fromString;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 /**
  * User: agwibowo
- * Date: 28/02/12
- * Time: 9:51 PM
  */
 public class RobotSimulator {
     public static final Logger LOGGER = LoggerFactory.getLogger(RobotSimulator.class);
@@ -25,10 +26,13 @@ public class RobotSimulator {
 
     private Commander commandReader;
 
-    public RobotSimulator(Commander commandReader) {
+    private PrintStream printStream;
+
+    public RobotSimulator(Commander commandReader, PrintStream printStream) {
         this.robot = new Robot(new Board(5, 5));
         this.robot.setOnBoard(false);  // initially robot is not on the table yet.
         this.commandReader = commandReader;
+        this.printStream = printStream;
     }
 
     /**
@@ -53,7 +57,7 @@ public class RobotSimulator {
      */
     private void doExecuteCommand(String commandString) {
         try {
-            Command command = fromString(commandString);
+            Command command = new CommandParser(printStream).fromString(commandString);
             command.execute(robot);
         } catch (InvalidCommandException e) {
             LOGGER.debug("Invalid command [{}]", e.getMessage());
@@ -64,39 +68,102 @@ public class RobotSimulator {
         return robot;
     }
 
-    public static void main(String... args) throws IOException, ParseException {
-        Commander commander = getCommander(args);
-        RobotSimulator robotSimulator = new RobotSimulator(commander);
+    public static void main(String... args)
+            throws IOException, ParseException {
+        RobotSimulatorOptions options = new RobotSimulatorOptions();
+        try {
+            options.parseCommandLineArguments(args);
+        } catch (ParseException e) {
+            options.displayHelp();
+            System.exit(1);
+        }
+        Commander commander = options.getCommander();
+        RobotSimulator robotSimulator = new RobotSimulator(commander, System.out);
         robotSimulator.run();
     }
 
-    private static Commander getCommander(String[] args) throws IOException {
-        Commander commandReader = null;
-        Options options = new Options();
-        Option fileOption = OptionBuilder.withArgName("file")
-                .hasArg()
-                .withDescription("When this option is specified, the program will use the given file as input, instead of reading from standard input")
-                .create("file");
 
-        options.addOption(fileOption);
-        CommandLineParser parser = new PosixParser();
-        try {
-            CommandLine cli = parser.parse(options, args);
-            if (cli.hasOption("file")) {
-                commandReader = new InputFileCommander(cli.getOptionValue("file"));
-            }else{
-                commandReader = new SystemInCommander();
-            }
-            return commandReader;
-        } catch (ParseException e) {
-            displayHelp(options);
-            System.exit(1);
-            return null;
+    /**
+     * Helper class for {@link Options} in running the simulation
+     */
+    public static class RobotSimulatorOptions {
+        /**
+         * Options for running the simulator
+         */
+        private Options options;
+
+        private CommandLine cli;
+
+        public RobotSimulatorOptions() throws ParseException {
+            options = createOptions();
         }
-    }
 
-    private static void displayHelp(Options options) {
-        HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp( "Robot Simulator", options );
+        private Options createOptions() {
+            Options options = new Options();
+            Option fileOption = OptionBuilder.withArgName("file")
+                    .hasArg()
+                    .withDescription("When this option is specified, the program will use the given file as input, instead of reading from standard input")
+                    .create("file");
+            options.addOption(fileOption);
+            return options;
+        }
+
+        /**
+         * @return <code>true</code> if the program is driven from input file, <code>false</code> otherwise
+         */
+        private boolean shouldReadFromInputFile() {
+            checkNotNull(cli, "Command line argument has not been parsed");
+            return cli.hasOption("file");
+        }
+
+        /**
+         * @return input file name, should the program be driven from input file
+         */
+        private String getInputFilename() {
+            checkNotNull(cli, "Command line argument has not been parsed");
+            return cli.getOptionValue("file");
+        }
+
+        /**
+         * Create {@link Commander} which will give commands to the robot
+         * This method will return either 
+         * <ul>
+         *     <li>{@link InputFileCommander} if user has chosen to read input from file</li>
+         *     <li>{@link InputStreamCommander} if user has chosen to read input from input stream (standard input)</li>
+         * </ul>
+         * <p/>
+         * @return {@link Commander} instance, based on what user chooses
+         * @throws IOException if user chooses to read command from file, and theres problem in reading the file, e.g.
+         *         the file does not exist, or it is not readable
+         * @see InputFileCommander
+         * @see InputStreamCommander
+         */
+        public Commander getCommander()
+                throws IOException {
+            if (shouldReadFromInputFile()) {
+                return new InputFileCommander(getInputFilename());
+            }else{
+                return new InputStreamCommander(System.in);
+            }
+        }
+
+        /**
+         * Parse the command line argument from the CLI
+         * <p/>
+         * @param args program arguments
+         * @throws ParseException error in parsing the CLI arguments
+         */
+        public void parseCommandLineArguments(String... args) throws ParseException {
+            CommandLineParser parser = new PosixParser();
+            cli = parser.parse(options, args);
+        }
+
+        /**
+         * Display help for the application
+         */
+        public void displayHelp() {
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printHelp( "Robot Simulator", options );
+        }
     }
 }

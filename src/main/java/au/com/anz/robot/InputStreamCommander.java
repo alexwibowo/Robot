@@ -2,24 +2,27 @@ package au.com.anz.robot;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import static org.apache.commons.io.IOUtils.closeQuietly;
 
 /**
- * Implementation of {@link Commander} which uses {@link System#in} as the source
+ * Implementation of {@link Commander} which reads the commands from  {@link InputStream}
  * of input.
  * <p/>
  * User: agwibowo
- * Date: 29/02/12
- * Time: 5:15 PM
  */
-public class SystemInCommander implements Commander {
+public class InputStreamCommander implements Commander {
 
     private BufferedReader reader;
 
-    public SystemInCommander() {
-        reader = new BufferedReader(new InputStreamReader(System.in));
+    /**
+     * Input stream to read command from
+     * @param inputStream the input stream
+     */
+    public InputStreamCommander(InputStream inputStream) {
+        reader = new BufferedReader(new InputStreamReader(inputStream));
     }
 
     public String getNextCommand()

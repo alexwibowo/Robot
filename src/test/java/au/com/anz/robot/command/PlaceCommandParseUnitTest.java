@@ -4,13 +4,12 @@ import au.com.anz.robot.model.Direction;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.fail;
 
 /**
  * User: agwibowo
- * Date: 29/02/12
- * Time: 12:11 AM
  */
 public class PlaceCommandParseUnitTest {
 
@@ -206,6 +205,17 @@ public class PlaceCommandParseUnitTest {
             fail("Should have failed due to invalid command");
         } catch (MalformedCommandException e) {
             assertThat(e.getCommandString(), equalTo("PLACE 1,2,NORTH PLACE 1,2,NORTH"));
+        }
+    }
+
+    @Test
+    public void should_throw_exception_when_given_large_integer() throws InvalidCommandException {
+        int maxInt = Integer.MAX_VALUE;
+        try {
+            PlaceCommand.createFromString("PLACE "+maxInt+"1234,"+maxInt+"22222,NORTH");
+            fail("Should have failed due to invalid command");
+        } catch (InvalidCoordinateException e) {
+            assertThat(e.getMessage(), containsString("cannot be parsed into a valid board coordinate"));
         }
     }
 }

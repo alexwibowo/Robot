@@ -7,10 +7,8 @@ import org.apache.commons.lang.StringUtils;
  * A command to tell the robot to move one unit forward in the direction it is currently facing.
  * <p/>
  * User: agwibowo
- * Date: 28/02/12
- * Time: 9:33 PM
  */
-public class MoveCommand extends AbstractCommand {
+public class MoveCommand implements Command {
     public static final String COMMAND = "MOVE";
 
     /**

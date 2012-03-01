@@ -1,9 +1,9 @@
 package au.com.anz.robot.command;
 
+import au.com.anz.robot.NullPrintStream;
 import au.com.anz.robot.model.Board;
 import au.com.anz.robot.model.Direction;
 import au.com.anz.robot.model.Robot;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,9 +11,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 /**
- * User: Alex
- * Date: 29/02/12
- * Time: 12:45 PM
+ * User: agwibowo
  */
 public class ReportCommandUnitTest {
 
@@ -31,7 +29,7 @@ public class ReportCommandUnitTest {
 
     @Test
     public void robot_should_stay_at_the_current_position() {
-        new ReportCommand().execute(robot);
+        new ReportCommand(new NullPrintStream()).execute(robot);
 
         assertThat(robot.getX(), equalTo(3));
         assertThat(robot.getY(), equalTo(4));

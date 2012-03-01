@@ -41,10 +41,8 @@ import static java.util.regex.Pattern.compile;
  * </pre>
  * <p/>
  * User: agwibowo
- * Date: 28/02/12
- * Time: 11:19 PM
  */
-public class PlaceCommand extends AbstractCommand{
+public class PlaceCommand implements Command{
     private static final Logger LOGGER = LoggerFactory.getLogger(PlaceCommand.class.getName());
 
     public static final String COMMAND = "PLACE";
@@ -114,12 +112,21 @@ public class PlaceCommand extends AbstractCommand{
 
         if (matcher.find()
                 && matcher.hitEnd()) { // we dont want any extras. We want to be strict.
-            int x = parseInt(matcher.group(1));
-            int y = parseInt(matcher.group(2));
+            int x = parseCoordinate(matcher.group(1));
+            int y = parseCoordinate(matcher.group(2));
             String direction = matcher.group(3);
             return new PlaceCommand(x, y, Direction.parseSafely(direction));
         }else {
             throw new MalformedCommandException(commandString);
+        }
+    }
+
+    private static int parseCoordinate(String coordinate)
+            throws InvalidCoordinateException {
+        try {
+            return Integer.parseInt(coordinate);
+        } catch (NumberFormatException e) {
+            throw new InvalidCoordinateException(coordinate);
         }
     }
 }

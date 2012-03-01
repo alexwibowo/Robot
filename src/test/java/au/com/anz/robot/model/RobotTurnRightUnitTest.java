@@ -14,8 +14,6 @@ import static org.junit.Assert.assertThat;
 
 /**
  * User: agwibowo
- * Date: 28/02/12
- * Time: 10:31 PM
  */
 @RunWith(Parameterized.class)
 public class RobotTurnRightUnitTest {

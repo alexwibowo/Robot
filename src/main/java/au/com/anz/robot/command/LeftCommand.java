@@ -7,10 +7,8 @@ import org.apache.commons.lang.StringUtils;
  * A command to tell the robot to turn 90 degrees to the left
  * <p/>
  * User: agwibowo
- * Date: 28/02/12
- * Time: 9:33 PM
  */
-public class LeftCommand extends AbstractCommand {
+public class LeftCommand implements Command {
     public static final String COMMAND = "LEFT";
 
     /**

@@ -8,11 +8,10 @@ import org.slf4j.LoggerFactory;
 
 import static au.com.anz.robot.model.Direction.*;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.lang.String.format;
 
 /**
  * User: agwibowo
- * Date: 28/02/12
- * Time: 9:42 PM
  */
 public class Robot {
     private static final Logger LOGGER = LoggerFactory.getLogger(Robot.class.getName());
@@ -94,7 +93,7 @@ public class Robot {
      */
     public void moveForward()
             throws InvalidRobotMovementException {
-        LOGGER.debug("Performing move forward");
+        LOGGER.trace("Receive move forward instruction");
 
         validateRobotIsOnBoard();
         int newX = getX();
@@ -117,12 +116,12 @@ public class Robot {
         }
 
         if (board.isValidPosition(newX, newY)) {
-            LOGGER.debug("Robot is moving forward to new position [{},{}]", newX, newY);
+            LOGGER.info("Moving forward to new position [{},{}]", newX, newY);
             setX(newX);
             setY(newY);
         }else{
             // new position is invalid - robot will fall off the table.
-            LOGGER.debug("Robot is not moving forward, as new position is invalid [{},{}]",newX, newY);
+            LOGGER.info("Not moving forward, as new position is invalid [{},{}]", newX, newY);
         }
     }
 
@@ -136,8 +135,9 @@ public class Robot {
      * Turn the robot 90 degree to the left. Robot will stay in the current location.
      */
     public void turnLeft() throws InvalidRobotMovementException {
-        LOGGER.debug("Performing turn left");
+        LOGGER.trace("Receive turn left instruction");
         validateRobotIsOnBoard();
+        LOGGER.info("Turning left");
         switch (facingDirection) {
             case NORTH:
                 setFacingDirection(WEST);
@@ -160,8 +160,9 @@ public class Robot {
      * Turn the robot 90 degree to the right. Robot will stay in the current location.
      */
     public void turnRight() throws InvalidRobotMovementException {
-        LOGGER.debug("Performing turn right");
+        LOGGER.trace("Receive turn right instruction");
         validateRobotIsOnBoard();
+        LOGGER.info("Turning right");
         switch (facingDirection) {
             case NORTH:
                 setFacingDirection(EAST);
@@ -187,7 +188,7 @@ public class Robot {
     @Override
     public String toString() {
         if (isOnBoard()) {
-            return String.format("%d,%d,%s", getX(), getY(), getFacingDirection());
+            return format("%d,%d,%s", getX(), getY(), getFacingDirection());
         }else {
             return "Robot is not on board yet";
         }

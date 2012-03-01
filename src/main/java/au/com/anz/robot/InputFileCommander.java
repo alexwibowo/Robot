@@ -12,8 +12,6 @@ import static java.lang.String.format;
  * commands to be given to the robot.
  * <p/>
  * User: agwibowo
- * Date: 29/02/12
- * Time: 8:39 PM
  */
 public class InputFileCommander implements Commander{
 

@@ -6,8 +6,6 @@ import static com.google.common.base.Preconditions.checkArgument;
  * Representation of the board where the robot will be roam around.
  * <p/>
  * User: agwibowo
- * Date: 28/02/12
- * Time: 9:48 PM
  */
 public class Board {
     /**

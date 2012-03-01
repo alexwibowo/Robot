@@ -7,8 +7,6 @@ import static org.junit.Assert.assertThat;
 
 /**
  * User: agwibowo
- * Date: 29/02/12
- * Time: 11:55 PM
  */
 public class RobotUnitTest {
     

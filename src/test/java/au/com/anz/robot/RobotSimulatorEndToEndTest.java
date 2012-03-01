@@ -2,7 +2,6 @@ package au.com.anz.robot;
 
 import au.com.anz.robot.model.Direction;
 import au.com.anz.robot.model.Robot;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,12 +12,12 @@ import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.when;
 
 /**
- * User: Alex
- * Date: 29/02/12
- * Time: 5:36 PM
+ * User: agwibowo
  */
 @RunWith(MockitoJUnitRunner.class)
 public class RobotSimulatorEndToEndTest {
@@ -33,7 +32,7 @@ public class RobotSimulatorEndToEndTest {
 
     @Before
     public void setup() {
-        robotSimulator = new RobotSimulator(commander);
+        robotSimulator = new RobotSimulator(commander, new NullPrintStream());
         robot = robotSimulator.getRobot();
     }
     
@@ -80,7 +79,8 @@ public class RobotSimulatorEndToEndTest {
 
         assertThat(robot.getX(), equalTo(0));
         assertThat(robot.getY(), equalTo(0));
-        assertThat(robot.getFacingDirection(), Matchers.nullValue());
+        assertThat(robot.getFacingDirection(), nullValue());
+        assertFalse(robot.isOnBoard());
     }
 
     @Test
@@ -146,6 +146,30 @@ public class RobotSimulatorEndToEndTest {
         assertThat(robot.getY(), equalTo(0));
         assertThat(robot.getFacingDirection(), equalTo(Direction.WEST));
     }
+    
+    @Test
+    public void test_moving_around_board_2() throws IOException {
+        when(commander.getNextCommand())
+                .thenReturn("PLACE 0,0,NORTH")
+                .thenReturn("MOVE").thenReturn("MOVE").thenReturn("MOVE").thenReturn("MOVE")
+                .thenReturn("RIGHT").thenReturn("MOVE").thenReturn("RIGHT")                      //0
+                .thenReturn("MOVE").thenReturn("MOVE").thenReturn("MOVE").thenReturn("MOVE")
+                .thenReturn("LEFT").thenReturn("MOVE").thenReturn("LEFT")                       // 1
+                .thenReturn("MOVE").thenReturn("MOVE").thenReturn("MOVE").thenReturn("MOVE")
+                .thenReturn("RIGHT").thenReturn("MOVE").thenReturn("RIGHT")                     // 2
+                .thenReturn("MOVE").thenReturn("MOVE").thenReturn("MOVE").thenReturn("MOVE")
+                .thenReturn("LEFT").thenReturn("MOVE").thenReturn("LEFT")                       // 3
+                .thenReturn("MOVE").thenReturn("MOVE").thenReturn("MOVE").thenReturn("MOVE")
+                .thenReturn("RIGHT").thenReturn("MOVE").thenReturn("RIGHT")                     // 4
+                .thenReturn("MOVE").thenReturn("MOVE").thenReturn("MOVE").thenReturn("MOVE")
+                .thenReturn(null);
+        robotSimulator.run();
+
+        assertThat(robot.getX(), equalTo(4));
+        assertThat(robot.getY(), equalTo(0));
+        assertThat(robot.getFacingDirection(), equalTo(Direction.SOUTH));
+         
+    }
 
     @Test
     public void test_multiple_place_command() throws IOException {
@@ -163,4 +187,7 @@ public class RobotSimulatorEndToEndTest {
         assertThat(robot.getY(), equalTo(0));
         assertThat(robot.getFacingDirection(), equalTo(Direction.EAST));
     }
+
+
+
 }

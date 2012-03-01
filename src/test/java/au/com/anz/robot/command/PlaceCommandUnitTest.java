@@ -13,8 +13,6 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * User: agwibowo
- * Date: 28/02/12
- * Time: 11:25 PM
  */
 public class PlaceCommandUnitTest {
 

@@ -3,17 +3,26 @@ package au.com.anz.robot.command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.PrintStream;
+
 import static org.apache.commons.lang.StringUtils.trim;
 
 /**
  * Parser for {@link Command}
  * <p/>
  * User: agwibowo
- * Date: 28/02/12
- * Time: 9:50 PM
  */
 public class CommandParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandParser.class.getName());
+    
+    private PrintStream printStream;
+
+    /**
+     * @param printStream printStream to be used for printing report
+     */
+    public CommandParser(PrintStream printStream) {
+        this.printStream = printStream;
+    }
 
     /**
      * Parse a string as a {@link Command}
@@ -22,7 +31,7 @@ public class CommandParser {
      * @return {@link Command} object that represents the passed in string
      * @throws InvalidCommandException
      */
-    public static Command fromString(String commandString)
+    public Command fromString(String commandString)
             throws InvalidCommandException {
         String trimmedCommand = trim(commandString);
 
@@ -36,7 +45,7 @@ public class CommandParser {
             return MoveCommand.createFromString(trimmedCommand);
             
         } else if (ReportCommand.hasSupportFor(trimmedCommand)) {
-            return ReportCommand.createFromString(trimmedCommand);
+            return ReportCommand.createFromString(printStream,trimmedCommand);
             
         } else if (PlaceCommand.hasSupportFor(trimmedCommand)) {
             return PlaceCommand.createFromString(trimmedCommand);

@@ -10,8 +10,6 @@ import static org.junit.Assert.fail;
 
 /**
  * User: agwibowo
- * Date: 28/02/12
- * Time: 10:37 PM
  */
 public class RobotMoveForwardUnitTest {
 

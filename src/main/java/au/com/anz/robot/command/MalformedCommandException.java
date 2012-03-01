@@ -6,8 +6,6 @@ import static org.apache.commons.lang.StringUtils.trim;
  * Exception to indicate that an unknown command had been issued.
  * <p/>
  * User: agwibowo
- * Date: 29/02/12
- * Time: 12:33 AM
  */
 public class MalformedCommandException extends InvalidCommandException{
 

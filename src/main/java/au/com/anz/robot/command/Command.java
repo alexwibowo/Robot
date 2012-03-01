@@ -6,8 +6,6 @@ import au.com.anz.robot.model.Robot;
  * Interface to all commands that can be executed on the robot
  * <p/>
  * User: agwibowo
- * Date: 28/02/12
- * Time: 9:32 PM
  */
 public interface Command {
 

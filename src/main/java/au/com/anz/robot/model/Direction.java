@@ -4,8 +4,6 @@ import au.com.anz.robot.command.InvalidDirectionException;
 
 /**
  * User: agwibowo
- * Date: 28/02/12
- * Time: 9:43 PM
  */
 public enum Direction {
     NORTH,

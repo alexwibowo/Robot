@@ -5,8 +5,6 @@ package au.com.anz.robot.command;
  * @see au.com.anz.robot.model.Direction for valid directions
  * <p/>
  * User: agwibowo
- * Date: 29/02/12
- * Time: 12:31 AM
  */
 public class InvalidDirectionException extends InvalidCommandException {
     private final String direction;
