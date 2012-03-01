@@ -77,9 +77,15 @@ public class RobotSimulator {
             options.displayHelp();
             System.exit(1);
         }
-        Commander commander = options.getCommander();
-        RobotSimulator robotSimulator = new RobotSimulator(commander, System.out);
-        robotSimulator.run();
+
+        try {
+            Commander commander = options.getCommander();
+            RobotSimulator robotSimulator = new RobotSimulator(commander, System.out);
+            robotSimulator.run();
+        } catch (IOException e) {
+            System.err.println("An error has occurred: " + e.getMessage());
+            System.exit(1);
+        }
     }
 
 

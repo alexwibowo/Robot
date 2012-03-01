@@ -213,9 +213,20 @@ public class PlaceCommandParseUnitTest {
         int maxInt = Integer.MAX_VALUE;
         try {
             PlaceCommand.createFromString("PLACE "+maxInt+"1234,"+maxInt+"22222,NORTH");
-            fail("Should have failed due to invalid command");
+            fail("Should have failed due to invalid coordinate");
         } catch (InvalidCoordinateException e) {
             assertThat(e.getMessage(), containsString("cannot be parsed into a valid board coordinate"));
+        }
+    }
+
+    @Test
+    public void should_throw_exception_when_given_small_integer() throws InvalidCommandException {
+        int minInt = Integer.MIN_VALUE;
+        try {
+            PlaceCommand.createFromString("PLACE "+minInt+"1234,"+minInt+"22222,NORTH");
+            fail("Should have failed, since coordinate should not be negative");
+        } catch (MalformedCommandException e) {
+            assertThat(e.getMessage(), containsString("Unknown command has been given"));
         }
     }
 }
