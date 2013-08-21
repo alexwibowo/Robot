@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/alexwibowo/Robot.png?branch=master)](https://travis-ci.org/alexwibowo/Robot)
-
+https://travis-ci.org/alexwibowo/Robot.png?branch=master
 
 Compiling the code:
 mvn clean install
