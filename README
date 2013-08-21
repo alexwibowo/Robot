@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/alexwibowo/Robot.png?branch=master)](https://travis-ci.org/alexwibowo/Robot)
+
+
 Compiling the code:
 mvn clean install
 
